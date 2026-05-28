@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12.7'
-          cache: 'pip'
 
       - name: Install dependencies
         run: |
@@ -49,9 +48,9 @@ jobs:
               try:
                   urllib.request.urlretrieve(url, "heart_raw/heart_raw.csv")
                   df = pd.read_csv("heart_raw/heart_raw.csv")
-                  print(f"✅ Dataset diunduh dari URL: {df.shape}")
+                  print(f"Dataset diunduh dari URL: {df.shape}")
               except Exception as e:
-                  print(f"⚠️  Gagal unduh ({e}) — generate dataset representatif")
+                  print(f"Gagal unduh ({e}) — generate dataset representatif")
                   url = ""
 
           if not url.strip():
@@ -74,7 +73,7 @@ jobs:
                   'target':   np.random.randint(0, 2, n)
               })
               df.to_csv("heart_raw/heart_raw.csv", index=False)
-              print(f"✅ Dataset representatif dibuat: {df.shape}")
+              print(f"Dataset representatif dibuat: {df.shape}")
           EOF
 
       # ─── Jalankan pipeline preprocessing (Step 1–8) ──────────────
@@ -91,24 +90,24 @@ jobs:
           python - <<'EOF'
           import pandas as pd, os, sys
 
-          assert os.path.exists("heart_preprocessing/train.csv"), "❌ train.csv tidak ditemukan!"
-          assert os.path.exists("heart_preprocessing/test.csv"),  "❌ test.csv tidak ditemukan!"
+          assert os.path.exists("heart_preprocessing/train.csv"), " train.csv tidak ditemukan!"
+          assert os.path.exists("heart_preprocessing/test.csv"),  " test.csv tidak ditemukan!"
 
           train = pd.read_csv("heart_preprocessing/train.csv")
           test  = pd.read_csv("heart_preprocessing/test.csv")
 
-          assert "target" in train.columns, "❌ Kolom target tidak ada di train!"
-          assert len(train) > 0,            "❌ train.csv kosong!"
-          assert len(test)  > 0,            "❌ test.csv kosong!"
+          assert "target" in train.columns, " Kolom target tidak ada di train!"
+          assert len(train) > 0,            " train.csv kosong!"
+          assert len(test)  > 0,            " test.csv kosong!"
 
           # Pastikan fitur baru ada (hasil Step 4 Feature Engineering)
-          assert "age_group"          in train.columns, "❌ age_group tidak ada!"
-          assert "chol_thalach_ratio" in train.columns, "❌ chol_thalach_ratio tidak ada!"
+          assert "age_group"          in train.columns, " age_group tidak ada!"
+          assert "chol_thalach_ratio" in train.columns, " chol_thalach_ratio tidak ada!"
 
-          print(f"✅ train.csv  : {train.shape}")
-          print(f"✅ test.csv   : {test.shape}")
-          print(f"✅ Kolom      : {list(train.columns)}")
-          print(f"✅ Validasi berhasil — dataset siap dilatih!")
+          print(f" train.csv  : {train.shape}")
+          print(f" test.csv   : {test.shape}")
+          print(f" Kolom      : {list(train.columns)}")
+          print(f" Validasi berhasil — dataset siap dilatih!")
           EOF
 
       # ─── Upload sebagai artifact GitHub ──────────────────────────
@@ -137,17 +136,17 @@ jobs:
       # ─── Summary ─────────────────────────────────────────────────
       - name: Summary
         run: |
-          echo "## ✅ Preprocessing Pipeline Completed" >> $GITHUB_STEP_SUMMARY
+          echo "##  Preprocessing Pipeline Completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Tahapan yang dijalankan identik dengan **Eksperimen_Student.ipynb**:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Step | Tahapan | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|------|---------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| 1 | Handle Missing Values | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 2 | Remove Duplicates | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 3 | Handle Outliers (IQR) | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 4 | Feature Engineering (Binning) | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 5 | Encoding Kategorikal | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 6 | Standarisasi (StandardScaler) | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 7 | Train-Test Split | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| 8 | Simpan Preprocessed Data | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| 1 | Handle Missing Values |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 2 | Remove Duplicates |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 3 | Handle Outliers (IQR) |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 4 | Feature Engineering (Binning) |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 5 | Encoding Kategorikal |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 6 | Standarisasi (StandardScaler) |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 7 | Train-Test Split |  |" >> $GITHUB_STEP_SUMMARY
+          echo "| 8 | Simpan Preprocessed Data |  |" >> $GITHUB_STEP_SUMMARY
